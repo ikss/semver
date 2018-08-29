@@ -1,0 +1,41 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        mavenCentral()
+    }
+    ext {
+        jUnitVersion = "5.2.0"
+        jUnitPluginVersion = "1.2.0"
+    }
+    dependencies {
+        classpath "gradle.plugin.com.zoltu.gradle.plugin:git-versioning:3.0.3"
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.3"
+        classpath "org.junit.platform:junit-platform-gradle-plugin:${jUnitPluginVersion}"
+    }
+}
+
+apply from: '/git_versioning.gradle'
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group = 'ru.ikss.utils'
+project.version = gitVersion
+
+
+dependencies {
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: jUnitVersion
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: jUnitVersion
+	testCompile group: 'org.junit.platform', name: 'junit-platform-console', version: jUnitPluginVersion
+	testCompile group: 'org.junit.platform', name: 'junit-platform-runner', version: jUnitPluginVersion
+	testCompile group: 'org.mockito', name: 'mockito-all', version: mockito_version
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10.0'
+}
