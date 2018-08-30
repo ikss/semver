@@ -1,10 +1,19 @@
+apply from: '/git_versioning.gradle'
+apply plugin: 'java'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group = 'ru.ikss.utils'
+project.version = gitVersion
+
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
-        mavenCentral()
     }
     ext {
         jUnitVersion = "5.2.0"
@@ -17,18 +26,16 @@ buildscript {
     }
 }
 
-apply from: '/git_versioning.gradle'
-apply plugin: 'java'
-apply plugin: 'idea'
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-group = 'ru.ikss.utils'
-project.version = gitVersion
-
+repositories {
+    mavenCentral()
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+}
 
 dependencies {
+    compile group: 'org.jetbrains', name: 'annotations', version: '16.0.2'
+
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: jUnitVersion
     testRuntime group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: jUnitVersion
     testRuntime group: 'org.junit.platform', name: 'junit-platform-console', version: jUnitPluginVersion
