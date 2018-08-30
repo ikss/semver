@@ -38,14 +38,37 @@ public final class VersionBuilder {
 
     public static Version build(@NotNull String fullVersion) {
         Matcher matches = PATTERN.matcher(fullVersion);
-        if (matches.matches()) {
-            try {
-                return makeVersion(matches);
-            } catch (NumberFormatException e) {
-                throw new VersionFormatException(fullVersion, e);
-            }
+        if (!matches.matches()) {
+            throw new VersionFormatException(fullVersion);
         }
-        throw new VersionFormatException(fullVersion);
+        try {
+            return makeVersion(matches);
+        } catch (NumberFormatException e) {
+            throw new VersionFormatException(fullVersion, e);
+        }
+    }
+
+    public static Version build(int major) {
+        return build(major, 0, 0, null, null);
+    }
+
+    public static Version build(int major, int minor, int patch, String preRelease, String metaData) {
+        StringBuilder version = new StringBuilder().append(major).append('.').append(minor).append('.').append(patch);
+        if (preRelease != null && !preRelease.isEmpty()) {
+            version.append('-').append(preRelease);
+        }
+        if (metaData != null && !metaData.isEmpty()) {
+            version.append('+').append(metaData);
+        }
+        return build(version.toString());
+    }
+
+    public static Version build(@NotNull String comparable, String metaData) {
+        String version = comparable;
+        if (metaData != null && !metaData.isEmpty()) {
+            version += "+" + metaData;
+        }
+        return build(version);
     }
 
     private static Version makeVersion(Matcher matches) {
